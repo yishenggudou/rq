@@ -1,7 +1,7 @@
 ### 0.4.0
 (not yet released)
 
-- ...
+- Removed support for direct attr assignment for custom properties. (Was deprecated since 0.3.1)
 
 
 ### 0.3.5
