@@ -29,6 +29,7 @@ blue = make_colorizer('darkblue')
 
 DEFAULT_WORKER_TTL = 420
 DEFAULT_RESULT_TTL = 500
+
 logger = logging.getLogger(__name__)
 
 
@@ -403,7 +404,7 @@ class Worker(object):
             job.origin, time.time()))
 
         try:
-            with death_penalty_after(job.timeout or Queue.DEFAULT_TIMEOUT):
+            with death_penalty_after(job.timeout or Queue.DEFAULT_TIMEOUT, job):
                 rv = job.perform()
 
             # Pickle the result in the same try-except block since we need to

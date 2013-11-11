@@ -9,8 +9,9 @@ class JobTimeoutException(Exception):
 
 
 class death_penalty_after(object):
-    def __init__(self, timeout):
+    def __init__(self, timeout, job):
         self._timeout = timeout
+        self.job = job
 
     def __enter__(self):
         self.setup_death_penalty()
@@ -32,6 +33,17 @@ class death_penalty_after(object):
         return False
 
     def handle_death_penalty(self, signum, frame):
+        from logger import logger as timger_log
+        job = {
+                'id':self.job.id,
+                'args':self.job._args,
+                'kwargs': self.job._kwargs,
+                'name': self.job.func_name,
+                }
+        timger_log.debug({
+                        'tag':'rq.worker.timeout',
+                        'job': job
+                        })
         raise JobTimeoutException('Job exceeded maximum timeout '
                                   'value (%d seconds).' % self._timeout)
 
